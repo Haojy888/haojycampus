@@ -4,6 +4,10 @@
 
 ![游戏画面](docs/game-preview.jpg)
 
+## 在线试玩
+
+**[点击进入游戏](https://haojy888.github.io/haojycampus/)**，无需下载或登录 GitHub。推荐使用电脑 Chrome / Edge，首次打开需要加载模型。
+
 ## 启动
 
 需要安装 Node.js，推荐在开启硬件加速的 Chrome / Edge 中游玩。所有运行依赖、模型和贴图已包含在仓库中，无需 npm 安装或构建。

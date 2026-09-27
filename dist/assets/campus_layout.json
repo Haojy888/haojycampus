@@ -1,0 +1,217 @@
+{
+  "coordinateSystem": "Three.js: x east, z south, y up; metres",
+  "bounds": {
+    "minX": -95,
+    "maxX": 95,
+    "minZ": -110,
+    "maxZ": 100
+  },
+  "spawn": {
+    "x": 0,
+    "z": 80
+  },
+  "colliders": [
+    {
+      "id": "library_west",
+      "x": -30,
+      "z": -28,
+      "w": 24,
+      "d": 22
+    },
+    {
+      "id": "library_east",
+      "x": 30,
+      "z": -28,
+      "w": 24,
+      "d": 22
+    },
+    {
+      "id": "assembly_hall",
+      "x": -64,
+      "z": 42,
+      "w": 26,
+      "d": 20
+    },
+    {
+      "id": "gymnasium",
+      "x": 65,
+      "z": 65,
+      "w": 35,
+      "d": 27
+    },
+    {
+      "id": "dorm_northwest",
+      "x": -30,
+      "z": -73,
+      "w": 30,
+      "d": 12
+    },
+    {
+      "id": "dorm_northeast",
+      "x": 30,
+      "z": -73,
+      "w": 30,
+      "d": 12
+    },
+    {
+      "id": "dorm_far_west",
+      "x": -30,
+      "z": -94,
+      "w": 30,
+      "d": 11
+    },
+    {
+      "id": "dorm_far_east",
+      "x": 30,
+      "z": -94,
+      "w": 30,
+      "d": 11
+    },
+    {
+      "id": "sculpture_base",
+      "x": 0,
+      "z": 48,
+      "w": 6.4,
+      "d": 2.2
+    },
+    {
+      "id": "pond_north_water",
+      "x": 35,
+      "z": -4.75,
+      "w": 14,
+      "d": 4.5
+    },
+    {
+      "id": "pond_south_water",
+      "x": 35,
+      "z": 4.75,
+      "w": 14,
+      "d": 4.5
+    },
+    {
+      "id": "teaching_west_stem",
+      "replaces": "teaching_west",
+      "x": -20.7,
+      "z": 34.1,
+      "w": 11.4,
+      "d": 20.8,
+      "h": 17
+    },
+    {
+      "id": "teaching_west_cross_wing",
+      "replaces": "teaching_west",
+      "x": -28,
+      "z": 19.6,
+      "w": 26,
+      "d": 8.2,
+      "h": 17
+    },
+    {
+      "id": "teaching_east_stem",
+      "replaces": "teaching_east",
+      "x": 20.7,
+      "z": 34.1,
+      "w": 11.4,
+      "d": 20.8,
+      "h": 17
+    },
+    {
+      "id": "teaching_east_cross_wing",
+      "replaces": "teaching_east",
+      "x": 28,
+      "z": 19.6,
+      "w": 26,
+      "d": 8.2,
+      "h": 17
+    },
+    {
+      "x": -28,
+      "z": 66,
+      "w": 22,
+      "d": 13,
+      "id": "art_building"
+    },
+    {
+      "x": 28,
+      "z": 66,
+      "w": 22,
+      "d": 13,
+      "id": "jiaxiu_administration"
+    },
+    {
+      "id": "east_wall_west",
+      "x": 50.15,
+      "z": -84,
+      "w": 0.55,
+      "d": 28,
+      "h": 4.35
+    },
+    {
+      "id": "east_wall_east",
+      "x": 59.85,
+      "z": -84,
+      "w": 0.55,
+      "d": 28,
+      "h": 4.35
+    }
+  ],
+  "landmarks": [
+    {
+      "id": "gate",
+      "name": "学校正门",
+      "x": 0,
+      "z": 82,
+      "description": "从南侧正门进入校园中轴。"
+    },
+    {
+      "id": "sculpture",
+      "name": "和 · 红金雕塑",
+      "x": 0,
+      "z": 53,
+      "description": "林荫大道上的红金书法雕塑，轮廓参考校园实景。"
+    },
+    {
+      "id": "theater",
+      "name": "中央阶梯剧场",
+      "x": 0,
+      "z": 0,
+      "description": "半圆看台围绕圆形露天舞台。"
+    },
+    {
+      "id": "ink_pond",
+      "name": "墨池小桥",
+      "x": 24,
+      "z": 0,
+      "description": "曲线水池与可步行的小桥。"
+    },
+    {
+      "id": "stadium",
+      "name": "田径体育场",
+      "x": 70,
+      "z": -22,
+      "description": "红色椭圆跑道环抱绿色运动场。"
+    },
+    {
+      "id": "gymnasium",
+      "name": "体育馆",
+      "x": 44,
+      "z": 65,
+      "description": "校园东南侧的室内运动馆。"
+    },
+    {
+      "id": "assembly_hall",
+      "name": "长廊餐厅",
+      "x": -47,
+      "z": 42,
+      "description": "西侧弧形餐厅，校园祭筹备点设在门前。"
+    },
+    {
+      "id": "academic",
+      "name": "格物楼与致知楼",
+      "x": 0,
+      "z": 30,
+      "description": "红砖教学楼、灰色顶层与围合的校园庭院。"
+    }
+  ],
+  "version": 3
+}

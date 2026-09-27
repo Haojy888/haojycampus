@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#183f36">
+  <meta name="description" content="在樱花盛开的校园，与三位同学找回策划页、试玩投篮、拍下合影，一起筹备春日校园祭。">
+  <title>晴日校园 · 春日校园祭</title>
+  <link rel="icon" href="./favicon.svg"><link rel="stylesheet" href="./style.css">
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/addons/"}}</script>
+</head>
+<body>
+  <canvas id="world" aria-label="三维校园游戏，使用WASD移动，拖动鼠标转动镜头"></canvas>
+  <header id="topbar">
+    <div class="brand"><span class="brand-mark">晴</span><div><strong>晴日校园</strong><span>CAMPUS DAYS</span></div></div>
+    <div class="top-actions"><span class="weather">☀ 春日校园祭</span><button id="journalBtn" title="剧情手账 J">手账 <kbd>J</kbd></button><button id="mapBtn" title="校园地图 M">地图 <kbd>M</kbd></button><button id="qualityBtn" title="切换画质">细腻</button><button id="helpBtn" aria-label="操作说明">?</button><button id="soundBtn" aria-label="开启提示音" title="提示音">♫</button></div>
+  </header>
+  <aside id="storyHud" class="glass"><div class="eyebrow" id="chapterLabel">第一章 / 春日校园祭</div><h1 id="storyTitle">校门口的临时搭档</h1><p id="storyObjective">有人抱着一摞海报，正朝你招手。</p><div id="storyProgress"></div><button id="trackStory">正在前往 <span id="storyDistance"></span></button></aside>
+  <aside id="quest" class="glass"><div class="eyebrow">支线 · 校园八景</div><h1>顺路收集风景</h1><div class="progress-row"><span id="progressText">0 / 8 处地标</span><span id="progressPercent">0%</span></div><div class="progress"><i id="progressBar"></i></div><div id="nextStop"></div></aside>
+  <aside id="miniPanel" class="glass"><div class="map-head"><strong>校园导览</strong><span>N ↑</span></div><canvas id="minimap" width="480" height="520" aria-label="校园地图，蓝点是当前位置"></canvas><div class="map-foot"><i></i> 你的位置 <span>◇ 待收集</span></div></aside>
+  <div id="placeTag">正门 · 春日出发</div>
+  <div id="interaction" hidden><span id="interactName"></span><button id="interactBtn"><kbd>E</kbd> 收集印章</button></div>
+  <footer id="controls"><span><kbd>W A S D</kbd> 移动</span><span><kbd>Shift</kbd> 奔跑</span><span>拖动鼠标 · 环顾</span><span>滚轮 · 远近</span><button id="homeBtn">返回校门</button></footer>
+  <div id="toast" role="status"></div>
+  <div id="loading" class="overlay"><div class="loading-card"><span class="big-mark">晴</span><h2>春天，等你来逛</h2><p id="loadingText">正在准备校园与主人公…</p><div class="load-track"><i></i></div><button id="retryBtn" hidden onclick="location.reload()">重新加载</button></div></div>
+  <dialog id="welcome"><span class="eyebrow">CAMPUS DAYS / SPRING FESTIVAL</span><h2>校园祭，还差你这一页。</h2><p>一阵风吹散了策划本。找回三页纸，认识几位新搭档，再给拍照的人留一个位置。这个下午，一起把活动准备好。</p><div class="key-grid"><span><kbd>W A S D</kbd> 移动</span><span><kbd>Shift</kbd> 奔跑</span><span><kbd>E</kbd> 对话 / 互动</span><span><kbd>J</kbd> 剧情手账</span></div><p class="small">拖动鼠标环顾，滚轮调整远近。进度自动保存在当前浏览器。</p><button id="startBtn" class="primary">走进春天 <span>→</span></button></dialog>
+  <dialog id="mapDialog"><div class="dialog-heading"><div><span class="eyebrow">YOUR CAMPUS JOURNAL</span><h2>校园漫游手册</h2></div><button class="close" data-close="mapDialog" aria-label="关闭">×</button></div><div id="landmarkList"></div><p class="small">点击地点设为目的地，跟随场景中的光标前往。</p></dialog>
+  <dialog id="helpDialog"><button class="close" data-close="helpDialog" aria-label="关闭">×</button><h2>慢慢逛，也可以跑起来。</h2><div class="key-grid"><span><kbd>W A S D</kbd> 移动</span><span><kbd>Shift</kbd> 奔跑</span><span><kbd>E</kbd> 对话 / 拾取 / 打卡</span><span><kbd>J</kbd> 剧情手账</span></div><p>按住鼠标左键拖动来环顾四周，滚轮拉近或拉远。左上角显示故事目标，小地图粉色星标指向目的地。投篮时按空格或点击按钮；拍照需点击确认。</p><p class="small">M 打开八景地图，Esc 暂停。进度保存在当前浏览器；画面卡顿时切换右上角“流畅”。如果迷路，使用“返回校门”。</p><button class="primary" data-close="helpDialog">继续漫游</button></dialog>
+  <dialog id="completeDialog"><span class="eyebrow">ALL STAMPS COLLECTED</span><div class="complete-seal">晴日<br>纪念</div><h2>这一圈，都是好风景。</h2><p>你已经完成所有校园地标打卡。继续自由探索，或重新开启一段春日漫游。</p><button class="primary" data-close="completeDialog">继续逛逛</button><button id="restartBtn" class="quiet">重新收集</button></dialog>
+  <dialog id="storyDialog"><button class="close" data-close="storyDialog" aria-label="结束对话">×</button><div class="dialog-person"><span id="speakerInitial"></span><div><strong id="speakerName"></strong><small id="speakerRole"></small></div></div><h2 id="dialogTitle"></h2><div id="dialogText"></div><div id="dialogChoices"></div></dialog>
+  <dialog id="journalDialog"><div class="dialog-heading"><div><span class="eyebrow">SPRING / OUR SMALL STORY</span><h2>这个下午的手账</h2></div><button class="close" data-close="journalDialog" aria-label="关闭手账">×</button></div><div id="journalBody"></div><button id="resetStoryBtn" class="quiet">重新开始这个故事</button></dialog>
+  <dialog id="rhythmDialog"><button class="close" data-close="rhythmDialog" aria-label="暂停投篮">×</button><span class="eyebrow">篮球社 · 先试一下</span><h2>找到自己的节奏</h2><p id="rhythmText">光标进入金色区间时按空格或点击投篮。一轮三次。</p><div id="shotDots"></div><div id="rhythmTrack"><span></span><i id="rhythmNeedle"></i></div><button id="shootBtn" class="primary">投篮 <kbd>Space</kbd></button><div id="rhythmResult" hidden></div></dialog>
+  <dialog id="photoDialog"><div class="photo-corners"></div><div class="photo-bar"><span id="photoCaption"></span><div><button id="photoCancel">稍后再拍</button><button id="photoConfirm" class="primary">拍下这一刻</button></div></div></dialog>
+  <dialog id="endingDialog"><span class="eyebrow">OUR SPRING FESTIVAL</span><img id="endingPhoto" alt="你和同学们的校园祭合影"><h2 id="endingTitle"></h2><p id="endingText"></p><div id="endingLines"></div><span id="endingBadge"></span><button class="primary" data-close="endingDialog">校园祭开始了，继续逛逛</button></dialog>
+  <div id="photoFlash" aria-hidden="true"></div>
+  <script type="module" src="./game.js"></script>
+</body>
+</html>

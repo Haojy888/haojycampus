@@ -1,0 +1,7 @@
+node_modules/
+.openai/
+.sites-runtime/
+.env
+.env.*
+*.zip
+*.blend1

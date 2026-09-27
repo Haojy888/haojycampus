@@ -1,0 +1,42 @@
+{
+  "school": "中央民族大学附属中学贵阳学校，乌当区洛湾半岛中学",
+  "retrieved": "2026-09-27",
+  "original_photographs_included": false,
+  "references": [
+    {
+      "page": "https://nano.gznc.edu.cn/info/1047/1493.htm",
+      "description": "校门、粉红石校名碑、红砖柱、灰瓦门廊和宽石阶",
+      "status": "new exterior"
+    },
+    {
+      "page": "https://www.gznc.edu.cn/info/1088/26146.htm",
+      "description": "和雕塑和两侧教学楼正立面；大灰山墙竖肋、窄凹窗",
+      "status": "new exterior"
+    },
+    {
+      "page": "https://www.gznc.edu.cn/info/1083/17534.htm",
+      "description": "院内步行道、砖柱白墙连廊、台地花池",
+      "status": "new exterior"
+    },
+    {
+      "page": "https://www.gznc.edu.cn/info/1083/17534.htm",
+      "description": "主轴两侧红砖楼、雕塑、灰瓦端墙、季节性行道树",
+      "status": "new exterior"
+    },
+    {
+      "page": "https://www.qianxinnet.com/kejijiaoyu/65995.html",
+      "description": "拔河活动背后的红砖平顶连廊、细黑白灯与绿篱",
+      "status": "new exterior"
+    },
+    {
+      "page": "https://freep.cn/5589781.html",
+      "description": "开校时期的下沉圆剧场全景、教学翼楼、环形低路",
+      "status": "new exterior; discovery source weaker, photo watermark Guiyang Daily"
+    },
+    {
+      "page": "https://mdfz.muc.edu.cn/info/1371/17351.htm",
+      "description": "外廊内部，红砖外柱、白墙、黑色顶格栅、浅砖地面",
+      "status": "new corridor detail"
+    }
+  ]
+}

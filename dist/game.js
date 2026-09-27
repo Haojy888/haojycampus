@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import {createAtmosphere} from './atmosphere.js';
-import {createStory} from './story.js';
+import {createAtmosphere} from './atmosphere.js?v=4';
+import {createStory} from './story.js?v=4';
 
 const $ = id => document.getElementById(id);
 const scene = new THREE.Scene();
@@ -63,8 +63,11 @@ $('world').addEventListener('wheel',e=>{e.preventDefault();distance=THREE.MathUt
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);atmosphere.resize();});
 
 // A circle against static building footprints keeps movement predictable in this outdoor scene.
+function inPolygon(x,z,poly){let inside=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const [a,b]=poly[i],[c,d]=poly[j];if((b>z)!==(d>z)&&x<(c-a)*(z-b)/(d-b)+a)inside=!inside;}return inside;}
+function inWater(x,z){if(layout.bridgeBounds.some(([a,b,c,d])=>x>a+.3&&x<b-.3&&z>c+.3&&z<d-.3))return false;return layout.waterPolygons.some(p=>[[0,0],[.35,0],[-.35,0],[0,.35],[0,-.35]].some(([dx,dz])=>inPolygon(x+dx,z+dz,p)));}
 function blocked(x,z){
   const r=.6,b=layout.bounds;if(x<b.minX+r||x>b.maxX-r||z<b.minZ+r||z>b.maxZ-r)return true;
+  if(inWater(x,z))return true;
   return layout.colliders.some(c=>{const dx=Math.max(Math.abs(x-c.x)-c.w/2,0),dz=Math.max(Math.abs(z-c.z)-c.d/2,0);return dx*dx+dz*dz<r*r;});
 }
 function stepPlayer(dt){
@@ -151,60 +154,59 @@ function proximity(){
   if(dest){const d=document.createElement('small');d.textContent=`${Math.round(Math.hypot(dest.x-player.position.x,dest.z-player.position.z))} m`;$('nextStop').append(d);}
 }
 function drawMap(){
-  const ctx=mapContext,w=480,h=520;ctx.clearRect(0,0,w,h);ctx.fillStyle='#cce0bd';ctx.fillRect(0,0,w,h);
-  const X=x=>(x+104)/208*w,Z=z=>(z+115)/220*h;
-  ctx.fillStyle='#8bbccc';ctx.fillRect(0,0,15,h);ctx.fillRect(w-15,0,15,h);ctx.fillRect(0,0,w,12);
-  ctx.fillStyle='#f3ecd8';ctx.fillRect(X(-7),Z(-103),X(7)-X(-7),Z(93)-Z(-103));
-  for(const z of [-53,0,55,85])ctx.fillRect(X(-85),Z(z-2.7),X(87)-X(-85),13);
-  ctx.fillStyle='#ba7864';layout.colliders.filter(c=>!c.id.includes('water')&&!c.id.includes('base')).forEach(c=>{ctx.fillRect(X(c.x-c.w/2),Z(c.z-c.d/2),c.w*w/208,c.d*h/220);ctx.fillStyle='#667569';ctx.fillRect(X(c.x-c.w/2),Z(c.z-c.d/2),c.w*w/208,4);ctx.fillStyle='#ba7864';});
-  ctx.strokeStyle='#bd7e65';ctx.lineWidth=11;ctx.beginPath();ctx.ellipse(X(70),Z(-22),35,64,0,0,Math.PI*2);ctx.stroke();
-  ctx.fillStyle='#76b4c6';ctx.beginPath();ctx.ellipse(X(35),Z(0),20,23,0,0,Math.PI*2);ctx.fill();
-  ctx.strokeStyle='#aab99b';ctx.lineWidth=5;for(let i=0;i<3;i++){ctx.beginPath();ctx.arc(X(0),Z(0),25+i*8,Math.PI,Math.PI*2);ctx.stroke();}
-  for(let i=0;i<layout.landmarks.length;i++){const l=layout.landmarks[i],done=collected.has(l.id);ctx.beginPath();ctx.arc(X(l.x),Z(l.z),11,0,Math.PI*2);ctx.fillStyle=done?'#255647':i===selected?'#d69a34':'#fff9e8';ctx.fill();ctx.strokeStyle='#567758';ctx.lineWidth=1.5;ctx.stroke();ctx.fillStyle=done?'#fff':'#3e573e';ctx.font='bold 15px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(done?'✓':String(i+1),X(l.x),Z(l.z)+1);}
-  const dest=story?.target();if(dest){ctx.beginPath();ctx.arc(X(dest.x),Z(dest.z),15,0,Math.PI*2);ctx.strokeStyle='#dd6d77';ctx.lineWidth=4;ctx.stroke();ctx.fillStyle='#b95460';ctx.font='bold 22px sans-serif';ctx.fillText('★',X(dest.x),Z(dest.z));}
-  ctx.save();ctx.translate(X(player.position.x),Z(player.position.z));ctx.rotate(-model.rotation.y+Math.PI);ctx.beginPath();ctx.moveTo(0,-12);ctx.lineTo(-7,8);ctx.lineTo(0,4);ctx.lineTo(7,8);ctx.closePath();ctx.fillStyle='#287cba';ctx.strokeStyle='white';ctx.lineWidth=3;ctx.stroke();ctx.fill();ctx.restore();
+  const ctx=mapContext,w=480,h=520,b=layout.bounds,p=layout.siteplan;
+  const X=x=>(x-b.minX)/(b.maxX-b.minX)*w,Z=z=>(z-b.minZ)/(b.maxZ-b.minZ)*h;
+  ctx.clearRect(0,0,w,h);ctx.fillStyle='#bad09e';ctx.fillRect(0,0,w,h);
+  function polygon(points,color){ctx.beginPath();points.forEach(([x,z],i)=>i?ctx.lineTo(X(x),Z(z)):ctx.moveTo(X(x),Z(z)));ctx.closePath();ctx.fillStyle=color;ctx.fill();}
+  for(const q of layout.waterPolygons)polygon(q,'#73b2c0');
+  function path(points,width,color){ctx.beginPath();points.forEach((q,i)=>i?ctx.lineTo(X(q.x),Z(q.z)):ctx.moveTo(X(q.x),Z(q.z)));ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineJoin=ctx.lineCap='round';ctx.stroke();}
+  path(p.westRoad,7,'#89988b');path(p.axis,11,'#f3edda');p.crossPaths.forEach(a=>path(a,6,'#f3edda'));path(p.eastGardenPath,4,'#f3edda');
+  for(const c of layout.colliders.filter(c=>!c.id.includes('base')&&!c.id.startsWith('gate'))){ctx.fillStyle='#ac6a54';ctx.fillRect(X(c.x-c.w/2),Z(c.z-c.d/2),c.w/(b.maxX-b.minX)*w,c.d/(b.maxZ-b.minZ)*h);}
+  for(const a of [p.stadium,p.westSports]){ctx.beginPath();ctx.ellipse(X(a.x),Z(a.z),a.w/(b.maxX-b.minX)*w/2,a.d/(b.maxZ-b.minZ)*h/2,0,0,Math.PI*2);ctx.fillStyle='#70a16f';ctx.fill();ctx.lineWidth=6;ctx.strokeStyle='#ba735f';ctx.stroke();}
+  ctx.beginPath();ctx.arc(X(p.theatre.x),Z(p.theatre.z),25*p.theatre.scale/(b.maxX-b.minX)*w,0,Math.PI*2);ctx.fillStyle='#dde0c6';ctx.fill();ctx.strokeStyle='#8a9d7b';ctx.lineWidth=3;ctx.stroke();
+  for(let i=0;i<layout.landmarks.length;i++){const l=layout.landmarks[i],done=collected.has(l.id);ctx.beginPath();ctx.arc(X(l.x),Z(l.z),10,0,Math.PI*2);ctx.fillStyle=done?'#255647':i===selected?'#d69a34':'#fff9e8';ctx.fill();ctx.strokeStyle='#567758';ctx.lineWidth=1.5;ctx.stroke();ctx.fillStyle=done?'#fff':'#3e573e';ctx.font='bold 14px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(done?'✓':String(i+1),X(l.x),Z(l.z)+1);}
+  const dest=story?.target();if(dest){ctx.beginPath();ctx.arc(X(dest.x),Z(dest.z),15,0,Math.PI*2);ctx.strokeStyle='#dd6d77';ctx.lineWidth=3;ctx.stroke();ctx.fillStyle='#b95460';ctx.font='bold 21px sans-serif';ctx.fillText('★',X(dest.x),Z(dest.z));}
+  ctx.save();ctx.translate(X(player.position.x),Z(player.position.z));ctx.rotate(-model.rotation.y+Math.PI);ctx.beginPath();ctx.moveTo(0,-11);ctx.lineTo(-6,7);ctx.lineTo(0,3);ctx.lineTo(6,7);ctx.closePath();ctx.fillStyle='#287cba';ctx.strokeStyle='white';ctx.lineWidth=2;ctx.fill();ctx.stroke();ctx.restore();
 }
+
 function playChime(){if(!audioContext)return;for(let i=0;i<3;i++){const o=audioContext.createOscillator(),g=audioContext.createGain();o.type='sine';o.frequency.value=[659,824,988][i];o.connect(g);g.connect(audioContext.destination);const t=audioContext.currentTime+i*.1;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.06,t+.02);g.gain.exponentialRampToValueAtTime(.001,t+.55);o.start(t);o.stop(t+.6);}}
 $('soundBtn').onclick=async()=>{if(!audioContext){audioContext=new AudioContext();await audioContext.resume();$('soundBtn').setAttribute('aria-label','关闭提示音');$('soundBtn').style.background='#e7c977';playChime();toast('印章提示音已开启。');}else{await audioContext.close();audioContext=null;$('soundBtn').style.background='';$('soundBtn').setAttribute('aria-label','开启提示音');toast('提示音已关闭。');}};
 async function load(){
   try{
-    const loader=new GLTFLoader();
-    const [map,campus,character,sculpture,placements,building,tree,npc,avenueTree,details,detailInfo,architecture]=await Promise.all([fetch('./assets/campus_layout.json').then(r=>{if(!r.ok)throw new Error('校园地图加载失败');return r.json();}),loader.loadAsync('./assets/campus_scene.glb'),loader.loadAsync('./assets/campus_player.glb'),loader.loadAsync('./assets/campus_v3_sculpture_game.glb'),fetch('./assets/campus_v2_environment.json').then(r=>r.json()),loader.loadAsync('./assets/architecture_v3_full.glb'),loader.loadAsync('./assets/campus_v2_tree_game.glb'),loader.loadAsync('./assets/campus_v2_npc_game.glb'),loader.loadAsync('./assets/campus_v3_avenue_tree_game.glb'),loader.loadAsync('./assets/details_scene.glb'),fetch('./assets/details_info.json').then(r=>r.json()),fetch('./assets/architecture_v3_manifest.json').then(r=>r.json())]);
-    layout=map;scene.add(campus.scene);
-    campus.scene.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;if(['grass','grass2','stone','stone2','paver','road','field','court','track','bank'].includes(o.name))groundMeshes.push(o);}});
-    const prefixes=architecture.replaces.map(id=>placements.replaceBuildings.hidePrefixes[id]);
-    campus.scene.traverse(o=>{if(prefixes.some(p=>o.name.startsWith(p))||placements.replaceCherryTrees.hideObjectNames.includes(o.name))o.visible=false;});
-    building.scene.traverse(o=>{if(o.isMesh){o.castShadow=o.receiveShadow=true;if(o.name.endsWith('__SILLS_PLINTH'))groundMeshes.push(o);}});scene.add(building.scene);
-    const walkable=new Set(detailInfo.walkableMeshNames);
-    details.scene.traverse(o=>{if(o.isMesh){o.castShadow=o.receiveShadow=true;if(walkable.has(o.name))groundMeshes.push(o);if(['V3_TREE_BRACES','V3_TREE_BRACE_TIES'].includes(o.name))o.visible=false;}});scene.add(details.scene);
-    atmosphere.prepareWater(campus.scene);
-    campus.scene.traverse(o=>{if(placements.replaceGreenTrees.hideObjectNames.includes(o.name))o.visible=false;});
-    // Trees keep their own spring foliage; the two originals share geometry through instancing.
-    for(const [type,asset,height] of [['cherry',tree,7.5],['green',avenueTree,10]]){
-      const size=new THREE.Box3().setFromObject(asset.scene).getSize(new THREE.Vector3());asset.scene.updateMatrixWorld(true);
-      const positions=placements.trees.filter(t=>t.type===type).filter(t=>!(t.x===53&&t.z===-84)).map(t=>t.x===24&&t.z===-12?{...t,x:26,z:-10}:t);
-      asset.scene.traverse(o=>{if(!o.isMesh)return;const inst=new THREE.InstancedMesh(o.geometry,o.material,positions.length),dummy=new THREE.Object3D();inst.name=type==='green'?'V3_SPRING_AVENUE_TREES':'V3_CHERRY_TREES';inst.castShadow=inst.receiveShadow=true;
-        positions.forEach((p,i)=>{dummy.position.set(p.x,.05,p.z);dummy.scale.setScalar(height*p.scale/size.y);dummy.rotation.y=i*2.399;dummy.updateMatrix();inst.setMatrixAt(i,new THREE.Matrix4().multiplyMatrices(dummy.matrix,o.matrixWorld));});inst.instanceMatrix.needsUpdate=true;scene.add(inst);});
+    const loader=new GLTFLoader(),json=async name=>{const r=await fetch('./assets/'+name);if(!r.ok)throw Error('无法载入校园地图');return r.json();};
+    const [map,scenery,gateInfo,campus,building,gate,plants,letters,character,sculpture,cherry,npc,green,stone,rock,plinth]=await Promise.all([
+      json('campus_layout_v4.json'),json('scenery_v4.json'),json('landscape_v4_info.json'),
+      ...['site_terrain','architecture_v4_site','landscape_v4','planting_modules_v4','school_letters_v4','campus_player','campus_v3_sculpture_game','campus_v4_cherry_game','campus_v2_npc_game','campus_v3_avenue_tree_game','campus_v4_gate_stone_game','campus_v4_limestone_game','stone_plinth_v4'].map(n=>loader.loadAsync('./assets/'+n+'.glb'))]);
+    layout=map;
+    const walkable=new Set([...scenery.terrainWalkable,...scenery.architectureWalkable,...(gateInfo.walkableMeshNames||[])]);
+    function addWorld(asset){asset.scene.traverse(o=>{if(o.isMesh){o.castShadow=o.receiveShadow=true;if(walkable.has(o.name)){groundMeshes.push(o);o.castShadow=false;}if(asset===campus&&!/LAMP|BENCH|GOALS|BOUNDARY/.test(o.name))o.castShadow=false;}});scene.add(asset.scene);}
+    addWorld(campus);addWorld(building);addWorld(gate);atmosphere.prepareWater(campus.scene);
+    function instances(asset,positions,name){
+      asset.scene.updateMatrixWorld(true);
+      asset.scene.traverse(o=>{if(!o.isMesh||!positions.length)return;const inst=new THREE.InstancedMesh(o.geometry,o.material,positions.length),dummy=new THREE.Object3D();inst.name=name;inst.castShadow=inst.receiveShadow=true;
+        positions.forEach((p,i)=>{dummy.position.set(p.x,p.y??.03,p.z);dummy.scale.setScalar(p.scale??1);dummy.rotation.y=p.yaw||0;dummy.updateMatrix();inst.setMatrixAt(i,new THREE.Matrix4().multiplyMatrices(dummy.matrix,o.matrixWorld));});inst.instanceMatrix.needsUpdate=true;scene.add(inst);
+      });
     }
-    for(const name of ['LANDMARK_SCULPTURE','LANDMARK_SCULPTURE_BASE_DARK','LANDMARK_SCULPTURE_BASE_LIGHT','LANDMARK_SCULPTURE_BASE_GOLD']){const old=campus.scene.getObjectByName(name);if(old)old.visible=false;}
-    sculpture.scene.position.set(0,.03,48);
-    sculpture.scene.traverse(o=>{if(o.isMesh){o.castShadow=o.receiveShadow=true;for(const m of(Array.isArray(o.material)?o.material:[o.material])){m.metalness=.12;m.roughness=.46;}}});scene.add(sculpture.scene);
-    // Collision boxes are also camera blockers; scenery and trees stay transparent to the camera logic.
+    for(const [type,asset] of [['green',green],['cherry',cherry]]){const size=new THREE.Box3().setFromObject(asset.scene).getSize(new THREE.Vector3());instances(asset,scenery.trees.filter(t=>t.type===type).map(t=>({...t,scale:t.height/size.y})),type+' campus trees');}
+    instances(rock,scenery.rocks,'Natural limestone at water garden');
+    const moduleNames={flowers:'V4_WHITE_GROUNDCOVER',red_shrub:'V4_REDLEAF_SHRUBS',tree_seat:'V4_STONE_TREEPIT'};
+    for(const [type,name] of Object.entries(moduleNames)){const source=plants.scene.getObjectByName(name);if(!source)throw Error('景观模块缺失 '+name);const group=new THREE.Group();group.add(source.clone());instances({scene:group},scenery.garden.filter(t=>t.type===type),name);}
+    sculpture.scene.position.set(scenery.statue.x,.03,scenery.statue.z);sculpture.scene.scale.setScalar(scenery.statue.scale);addWorld(sculpture);
+    stone.scene.position.set(scenery.gateStone.x,scenery.gateStone.y,scenery.gateStone.z);addWorld(stone);
+    letters.scene.position.copy(stone.scene.position);addWorld(letters);
+    plinth.scene.position.set(scenery.gateStone.x,0,scenery.gateStone.z);addWorld(plinth);
     layout.colliders.filter(c=>!c.id.includes('water')&&!c.id.includes('base')).forEach(c=>cameraBoxes.push(new THREE.Box3(new THREE.Vector3(c.x-c.w/2,0,c.z-c.d/2),new THREE.Vector3(c.x+c.w/2,c.h||17,c.z+c.d/2))));
-    for(const b of detailInfo.eastUnderpass.cameraOnlyBlockers)cameraBoxes.push(new THREE.Box3(new THREE.Vector3(b.x-b.w/2,b.y-b.h/2,b.z-b.d/2),new THREE.Vector3(b.x+b.w/2,b.y+b.h/2,b.z+b.d/2)));
-    cameraBoxes.push(new THREE.Box3(new THREE.Vector3(-11,4.46,92.5),new THREE.Vector3(11,5.7,93.5)));
+    for(const b of gateInfo.cameraOnlyBlockers||[])cameraBoxes.push(new THREE.Box3(new THREE.Vector3(b.x-b.w/2,b.y-b.h/2,b.z-b.d/2),new THREE.Vector3(b.x+b.w/2,b.y+b.h/2,b.z+b.d/2)));
     model=character.scene;player.add(model);model.rotation.y=Math.PI;
-    model.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;o.frustumCulled=false;}});
-    mixer=new THREE.AnimationMixer(model);
-    for(const c of character.animations){if(/walk/i.test(c.name))actions.walk=mixer.clipAction(c);else if(/idle/i.test(c.name))actions.idle=mixer.clipAction(c);}
-    activeAction=actions.idle;activeAction?.play();
-    player.position.set(layout.spawn.x,.12,layout.spawn.z);makeMarkers();updateProgress();updateCamera(1);
-    story=createStory({scene,player,npc,hero:model,toast,openDialog,ground:(x,z)=>{groundRay.set(new THREE.Vector3(x,3,z),new THREE.Vector3(0,-1,0));return (groundRay.intersectObjects(groundMeshes,false)[0]?.point.y||0)+.025;},started:()=>started,snapshot:()=>({position:player.position.toArray(),stamps:[...collected]}),restore:data=>{if(Array.isArray(data.position)&&data.position.length===3&&data.position.every(Number.isFinite)&&!blocked(data.position[0],data.position[2]))player.position.fromArray(data.position);for(const id of data.stamps||[])if(layout.landmarks.some(l=>l.id===id))collected.add(id);updateProgress();},capture:()=>{atmosphere.render();const c=document.createElement('canvas');c.width=1280;c.height=Math.round(1280*innerHeight/innerWidth);c.getContext('2d').drawImage(renderer.domElement,0,0,c.width,c.height);return c.toDataURL('image/jpeg',.84);}});updateCamera(1);
+    model.traverse(o=>{if(o.isMesh){o.castShadow=o.receiveShadow=true;o.frustumCulled=false;}});
+    mixer=new THREE.AnimationMixer(model);for(const c of character.animations){if(/walk/i.test(c.name))actions.walk=mixer.clipAction(c);else if(/idle/i.test(c.name))actions.idle=mixer.clipAction(c);}
+    activeAction=actions.idle;activeAction?.play();player.position.set(layout.spawn.x,.12,layout.spawn.z);makeMarkers();updateProgress();updateCamera(1);
+    story=createStory({scene,player,npc,hero:model,toast,openDialog,ground:(x,z)=>{groundRay.set(new THREE.Vector3(x,3,z),new THREE.Vector3(0,-1,0));return (groundRay.intersectObjects(groundMeshes,false)[0]?.point.y||0)+.025;},started:()=>started,snapshot:()=>({mapVersion:4,position:player.position.toArray(),stamps:[...collected]}),restore:data=>{if(data.mapVersion===4&&Array.isArray(data.position)&&data.position.length===3&&data.position.every(Number.isFinite)&&!blocked(data.position[0],data.position[2]))player.position.fromArray(data.position);for(const id of data.stamps||[])if(layout.landmarks.some(l=>l.id===id))collected.add(id);updateProgress();},capture:()=>{atmosphere.render();const c=document.createElement('canvas');c.width=1280;c.height=Math.round(1280*innerHeight/innerWidth);c.getContext('2d').drawImage(renderer.domElement,0,0,c.width,c.height);return c.toDataURL('image/jpeg',.84);}});updateCamera(1);
     ready=true;$('loading').remove();openDialog('welcome');
-    // Read-only diagnostics allow a reproducible smoke check without adding cheats to gameplay.
-    window.campusGame={state:()=>({ready,started,position:player.position.toArray(),collected:[...collected],landmarks:layout.landmarks.length,animations:character.animations.map(c=>c.name),story:story.state(),quality:atmosphere.quality?'high':'smooth'}),blocked};
+    window.campusGame={state:()=>({ready,started,mapVersion:4,position:player.position.toArray(),collected:[...collected],landmarks:layout.landmarks.length,animations:character.animations.map(c=>c.name),story:story.state(),quality:atmosphere.quality?'high':'smooth',buildings:19,trees:scenery.trees.length}),blocked};
   }catch(e){console.error(e);$('loadingText').textContent='校园暂时没能加载完成，请重试。';$('retryBtn').hidden=false;document.querySelector('.load-track').hidden=true;}
 }
+
 load();
 let mapTick=0;
 renderer.setAnimationLoop(()=>{

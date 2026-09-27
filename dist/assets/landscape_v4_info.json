@@ -1,0 +1,106 @@
+{
+  "coordinateSystem": "Game x east, z south, Y up; Blender x,-z,y",
+  "scope": "Photo-informed entrance only; pond planting supplied separately at local origin for remapped campus",
+  "sourcePhotos": [
+    "references/nano_8.jpg",
+    "references/gznc2021_7.jpg"
+  ],
+  "walkableMeshNames": [
+    "V4_GATE_WALK_TERRACE",
+    "V4_GATE_WALK_FRONT_STEPS",
+    "V4_GATE_WALK_REAR_STEPS"
+  ],
+  "extraCollisionBoxes": [
+    {
+      "id": "v4_gatehouse_west",
+      "x": -13.03,
+      "z": 98.24,
+      "w": 7.25,
+      "d": 5.55
+    },
+    {
+      "id": "v4_gate_column_-1_91.2",
+      "x": -8.33,
+      "z": 96.44,
+      "w": 1.48,
+      "d": 1.0
+    },
+    {
+      "id": "v4_gate_column_-1_94.8",
+      "x": -8.33,
+      "z": 100.03999999999999,
+      "w": 1.48,
+      "d": 1.0
+    },
+    {
+      "id": "v4_gatehouse_east",
+      "x": 12.97,
+      "z": 98.24,
+      "w": 7.25,
+      "d": 5.55
+    },
+    {
+      "id": "v4_gate_column_1_91.2",
+      "x": 8.270000000000001,
+      "z": 96.44,
+      "w": 1.48,
+      "d": 1.0
+    },
+    {
+      "id": "v4_gate_column_1_94.8",
+      "x": 8.270000000000001,
+      "z": 100.03999999999999,
+      "w": 1.48,
+      "d": 1.0
+    }
+  ],
+  "cameraOnlyBlockers": [
+    {
+      "x": -13.03,
+      "z": 98.24,
+      "y": 3.75,
+      "w": 7.8500000000000005,
+      "d": 6.15,
+      "h": 7.5
+    },
+    {
+      "x": 12.97,
+      "z": 98.24,
+      "y": 3.75,
+      "w": 7.8500000000000005,
+      "d": 6.15,
+      "h": 7.5
+    },
+    {
+      "x": -0.03,
+      "z": 98.24,
+      "y": 5.93,
+      "w": 20.85,
+      "d": 5.65,
+      "h": 1.3
+    }
+  ],
+  "gate": {
+    "center": [
+      -0.03,
+      98.24
+    ],
+    "clearWidth": 15.2,
+    "floorY": 0.46,
+    "ceilingY": 5.278,
+    "clearHeight": 4.818,
+    "maxWalkY": 0.46
+  },
+  "recommendedSchoolStone": {
+    "x": -6.03,
+    "z": 94.0,
+    "w": 7.5,
+    "d": 0.5,
+    "h": 2.2,
+    "keepSeparateFromCenterRoute": true
+  },
+  "replacesOldGate": true,
+  "cleanEnvironment": "environment_gate_clean.glb",
+  "triangles": 1880,
+  "meshCount": 21
+}

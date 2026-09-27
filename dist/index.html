@@ -16,7 +16,7 @@
   </header>
   <aside id="storyHud" class="glass"><div class="eyebrow" id="chapterLabel">第一章 / 春日校园祭</div><h1 id="storyTitle">校门口的临时搭档</h1><p id="storyObjective">有人抱着一摞海报，正朝你招手。</p><div id="storyProgress"></div><button id="trackStory">正在前往 <span id="storyDistance"></span></button></aside>
   <aside id="quest" class="glass"><div class="eyebrow">支线 · 校园八景</div><h1>顺路收集风景</h1><div class="progress-row"><span id="progressText">0 / 8 处地标</span><span id="progressPercent">0%</span></div><div class="progress"><i id="progressBar"></i></div><div id="nextStop"></div></aside>
-  <aside id="miniPanel" class="glass"><div class="map-head"><strong>校园导览</strong><span>N ↑</span></div><canvas id="minimap" width="480" height="520" aria-label="校园地图，蓝点是当前位置"></canvas><div class="map-foot"><i></i> 你的位置 <span>◇ 待收集</span></div></aside>
+  <aside id="miniPanel" class="glass"><div class="map-head"><strong>校园导览</strong><span>全景</span></div><canvas id="minimap" width="480" height="520" aria-label="校园地图，蓝点是当前位置"></canvas><div class="map-foot"><i></i> 你的位置 <span>◇ 待收集</span></div></aside>
   <div id="placeTag">正门 · 春日出发</div>
   <div id="interaction" hidden><span id="interactName"></span><button id="interactBtn"><kbd>E</kbd> 收集印章</button></div>
   <footer id="controls"><span><kbd>W A S D</kbd> 移动</span><span><kbd>Shift</kbd> 奔跑</span><span>拖动鼠标 · 环顾</span><span>滚轮 · 远近</span><button id="homeBtn">返回校门</button></footer>
@@ -32,6 +32,6 @@
   <dialog id="photoDialog"><div class="photo-corners"></div><div class="photo-bar"><span id="photoCaption"></span><div><button id="photoCancel">稍后再拍</button><button id="photoConfirm" class="primary">拍下这一刻</button></div></div></dialog>
   <dialog id="endingDialog"><span class="eyebrow">OUR SPRING FESTIVAL</span><img id="endingPhoto" alt="你和同学们的校园祭合影"><h2 id="endingTitle"></h2><p id="endingText"></p><div id="endingLines"></div><span id="endingBadge"></span><button class="primary" data-close="endingDialog">校园祭开始了，继续逛逛</button></dialog>
   <div id="photoFlash" aria-hidden="true"></div>
-  <script type="module" src="./game.js"></script>
+  <script type="module" src="./game.js?v=4"></script>
 </body>
 </html>

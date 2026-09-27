@@ -38,9 +38,9 @@ export const NPCS = [
     id: 'lin_cheng', name: '嘉豪', role: '学生会 · 活动统筹', color: '#df9868',
     detail: '抱着海报，说话利落。事情越多，越容易把自己的那份忘掉。',
     positions: {
-      gate: { x: 4, z: 77 }, pages: { x: 4, z: 77 },
-      rhythm: { x: -46, z: 45 }, photo: { x: -46, z: 45 },
-      finale: { x: -46, z: 45 }, complete: { x: -46, z: 45 },
+      gate: { x: 4, z: 89 }, pages: { x: 4, z: 89 },
+      rhythm: { x: -25, z: -43 }, photo: { x: -25, z: -43 },
+      finale: { x: -25, z: -43 }, complete: { x: -25, z: -43 },
     },
     dialogues: {
       gate: 'lin_gate', pages: 'lin_pages', rhythm: 'lin_waiting',
@@ -51,9 +51,9 @@ export const NPCS = [
     id: 'tang_yu', name: '唐予', role: '摄影社 · 记录员', color: '#8798c6',
     detail: '相机背带上挂着一枚旧校徽。拍照片前，总会先问一句“你愿意吗”。',
     positions: {
-      gate: { x: 22, z: 2 }, pages: { x: 22, z: 2 },
-      rhythm: { x: 22, z: -12 }, photo: { x: 22, z: -12 },
-      finale: { x: -44, z: 40 }, complete: { x: 22, z: -12 },
+      gate: { x: 40, z: -2 }, pages: { x: 40, z: -2 },
+      rhythm: { x: 34, z: -16 }, photo: { x: 34, z: -16 },
+      finale: { x: -24, z: -47 }, complete: { x: 34, z: -16 },
     },
     dialogues: {
       gate: 'tang_before', pages: 'tang_pages', rhythm: 'tang_waiting',
@@ -64,9 +64,9 @@ export const NPCS = [
     id: 'zhou_yu', name: '周屿', role: '篮球社 · 体验摊位负责人', color: '#73a582',
     detail: '投篮前会数三拍。看着很有把握，其实今天第一次负责活动。',
     positions: {
-      gate: { x: 60, z: -17 }, pages: { x: 60, z: -17 },
-      rhythm: { x: 60, z: -17 }, photo: { x: 60, z: -17 },
-      finale: { x: -46, z: 38 }, complete: { x: 60, z: -17 },
+      gate: { x: 74, z: 35 }, pages: { x: 74, z: 35 },
+      rhythm: { x: 74, z: 35 }, photo: { x: 74, z: 35 },
+      finale: { x: -23, z: -40 }, complete: { x: 74, z: 35 },
     },
     dialogues: {
       gate: 'zhou_before', pages: 'zhou_before', rhythm: 'zhou_rhythm',
@@ -78,7 +78,7 @@ export const NPCS = [
 export const ITEMS = [
   {
     id: 'page_welcome', name: '策划页一 · 谁都能来', chapterId: 'pages',
-    landmarkId: 'academic', position: { x: -11, z: 39 },
+    landmarkId: 'academic', position: { x: -14, z: 36 },
     clue: '西侧教学楼前，靠中轴步道的公告栏边。',
     inspect: '纸页压在公告栏底座旁，右上角画着一扇没有门槛的门。',
     text: '校园祭不只留给社团里的熟面孔。新来的同学、一个人逛的人、不想上台的人，都要有一个舒服的位置。\n——嘉豪的备注：别把“欢迎参加”只写在海报上。',
@@ -86,15 +86,15 @@ export const ITEMS = [
   },
   {
     id: 'page_try', name: '策划页二 · 先试一下', chapterId: 'pages',
-    landmarkId: 'academic', position: { x: 11, z: 17 },
-    clue: '沿中轴向北走，东侧教学楼前的连廊拐角。',
+    landmarkId: 'academic', position: { x: 13, z: 48.5 },
+    clue: '中轴东侧教学楼前，靠近南端的连廊拐角。',
     inspect: '这页夹在长椅脚边。上面有三个圆圈，旁边的“必须全中”被划掉了。',
     text: '篮球体验：每人三次。命中不是入场条件，愿意试一下就算参加。\n——周屿：如果第一球没进，旁边的人先别叹气。递下一球就好。',
     pickupText: '收好了《先试一下》。三个圆圈，原来是一次不怕失手的邀请。',
   },
   {
     id: 'page_memory', name: '策划页三 · 记得留位置', chapterId: 'pages',
-    landmarkId: 'ink_pond', position: { x: 24, z: 0 },
+    landmarkId: 'ink_pond', position: { x: 43, z: -1.3 },
     clue: '墨池小桥西侧的桥头，唐予附近。走陆地过去，不用下水。',
     inspect: '纸页卡在桥头石缝里，没沾到水。背面是一张很潦草的合影站位图。',
     text: '最后拍一张合影。别只拍布置完成的会场，也拍把会场一点点搭起来的人。\n——唐予：记得给拍照的人留个位置，可以用定时快门。',
@@ -106,7 +106,7 @@ export const CHAPTERS = [
   {
     id: 'gate', number: 1, title: '校门口的临时搭档', minutes: 2,
     objective: '去校门口和嘉豪聊聊。', progressLabel: '认识临时搭档',
-    target: { type: 'npc', id: 'lin_cheng', x: 4, z: 77, label: '嘉豪 · 学校正门' },
+    target: { type: 'npc', id: 'lin_cheng', x: 4, z: 89, label: '嘉豪 · 学校正门' },
     hint: '靠近抱着海报的同学，按 E 交谈。',
     completionEvent: 'quest_accepted', next: 'pages',
     enterText: '先看看他有什么需要帮忙的。',
@@ -125,9 +125,9 @@ export const CHAPTERS = [
   },
   {
     id: 'rhythm', number: 3, title: '投不进，也算参加', minutes: 3,
-    objective: '到田径体育场找周屿，完成一轮三次节奏投篮。',
+    objective: '到复兴体育场西入口找周屿，完成一轮三次节奏投篮。',
     progressLabel: '体验摊位 · 完成三次尝试',
-    target: { type: 'npc', id: 'zhou_yu', x: 60, z: -17, label: '周屿 · 体育场西侧入口' },
+    target: { type: 'npc', id: 'zhou_yu', x: 74, z: 35, label: '周屿 · 复兴体育场西入口' },
     hint: '光标进入高亮区时点击投篮。三次试完就完成任务，不要求全部命中。',
     completionEvent: 'rhythm_completed', next: 'photo',
     enterText: '周屿需要一位真正的试玩者，帮他看看规则会不会让人紧张。',
@@ -137,18 +137,18 @@ export const CHAPTERS = [
     id: 'photo', number: 4, title: '照片里也要有你', minutes: 3,
     objective: '去樱花树旁找唐予，选一句照片配文并确认拍照。',
     progressLabel: '樱花照片 · 选配文并拍下',
-    target: { type: 'npc', id: 'tang_yu', x: 22, z: -12, label: '唐予 · 樱花拍照点' },
+    target: { type: 'npc', id: 'tang_yu', x: 34, z: -16, label: '唐予 · 樱花拍照点' },
     hint: '拍照点在墨池北侧现有樱树之间。进入取景后，按“拍下这一刻”确认；取消可以重来。',
     completionEvent: 'photo_confirmed', next: 'finale',
     enterText: '这张照片会成为校园祭的开场页。配文由你来选。',
-    completeText: '照片收进手账了。现在去西侧筹备点，把今天最后一个决定交给大家。',
+    completeText: '照片收进手账了。现在去西北侧长廊餐厅筹备点，把今天最后一个决定交给大家。',
   },
   {
     id: 'finale', number: 5, title: '把开场留给大家', minutes: 3,
-    objective: '到长廊餐厅筹备点和嘉豪碰面，决定开场方式，留下一张合影。',
+    objective: '到西北侧长廊餐厅（第一食堂）筹备点和嘉豪碰面，决定开场方式，留下一张合影。',
     progressLabel: '筹备点收尾 · 决定开场方式',
-    target: { type: 'npc', id: 'lin_cheng', x: -46, z: 45, label: '嘉豪 · 筹备点东侧入口' },
-    hint: '三个选择都会完成故事，只会改变开场的小安排和纪念卡文案。',
+    target: { type: 'npc', id: 'lin_cheng', x: -25, z: -43, label: '嘉豪 · 长廊餐厅筹备点' },
+    hint: '长廊餐厅在校园西北侧，也就是俯视图左上方。三个选择都会完成故事，只会改变开场的小安排和纪念卡文案。',
     completionEvent: 'story_completed', next: null,
     enterText: '策划页、试玩记录、开场照片都齐了。你们终于能站在同一张照片里。',
     completeText: '校园祭正式开始。故事结束后，校园仍然可以自由漫游。',
@@ -175,8 +175,8 @@ export const PHOTO_STYLES = [
 ];
 
 export const PHOTO_SPOTS = {
-  cherry: { name: '樱花拍照点', x: 22, z: -12, relatedLandmarkId: 'ink_pond', confirmLabel: '拍下这一刻', cancelLabel: '再看看角度' },
-  finale: { name: '筹备点合影', x: -45, z: 42, confirmLabel: '留下合影', caption: '策划本补齐了，这次，照片里也一个人都没少。' },
+  cherry: { name: '樱花拍照点', x: 34, z: -13, relatedLandmarkId: 'ink_pond', confirmLabel: '拍下这一刻', cancelLabel: '再看看角度' },
+  finale: { name: '校园中轴合影', x: -2, z: 68, confirmLabel: '留下合影', caption: '策划本补齐了，这次，照片里也一个人都没少。' },
 };
 
 export const ENDINGS = {
@@ -253,7 +253,7 @@ export const DIALOGUES = {
     speaker: 'tang_yu', title: '三页都在，一页没少',
     lines: ['唐予按目录排好三页：“欢迎、体验、合影，齐了。我拍一份发给嘉豪，原件你继续收在手账里。”', '“体育场的周屿正缺一个试玩的人。他怕把投篮做得太难，我觉得你去试一下，比我们站这儿猜有用。”'],
     choices: [
-      { id: 'go', label: '好，我去试试看。', response: '沿墨池东侧道路往体育场走。周屿在西侧入口，手里抱着球。', effect: { event: 'pages_confirmed' } },
+      { id: 'go', label: '好，我去试试看。', response: '沿墨池东侧道路向南走到复兴体育场。周屿在西入口，手里抱着球。', effect: { event: 'pages_confirmed' } },
       { id: 'not_good', label: '我不太会投篮，也可以吗？', response: '当然，他最想听的就是第一次玩的人的感受。策划页上不是写了吗，先试一下就算参加。', effect: { event: 'pages_confirmed' } },
       { id: 'photo_later', label: '试玩以后，我们把照片也拍了。', response: '好，我先去墨池北侧的樱树旁找个角度。你试玩完来找我。', effect: { event: 'pages_confirmed' } },
     ],
@@ -298,7 +298,7 @@ export const DIALOGUES = {
     speaker: 'tang_yu', title: '这个角度挺好',
     lines: ['“我找到拍照的地方了。你先去体育场帮周屿试完，他从刚才起就一直在给我发问号。”', '“这里我等你，花也不会在这一会儿全落光。”'],
     choices: [
-      { id: 'go', label: '我先去体育场。', response: '他在西侧入口。三次投篮就能给他一个很实在的反馈。' },
+      { id: 'go', label: '我先去体育场。', response: '他在复兴体育场西入口。三次投篮就能给他一个很实在的反馈。' },
       { id: 'caption', label: '照片的配文想好了吗？', response: '还没。我想等你走完这一圈，再听你觉得今天像什么。' },
       { id: 'wait', label: '辛苦你等一下。', response: '没事，我正好看看光。只要最后记得把我也叫过去就行。' },
     ],
@@ -316,7 +316,7 @@ export const DIALOGUES = {
     speaker: 'tang_yu', title: '这一张，收好了',
     lines: ['“开场照片和配文都在手账里。照片不必每次都摆得很整齐，能让人想起当时的声音就挺好。”', '“走吧，嘉豪在筹备点等我们。定时快门我已经试过了，这次不会少一个人。”'],
     choices: [
-      { id: 'go', label: '筹备点见。', response: '筹备点东侧入口，嘉豪抱着那摞终于没被吹跑的海报。' },
+      { id: 'go', label: '筹备点见。', response: '往校园西北侧的长廊餐厅（第一食堂）走，嘉豪在入口抱着那摞终于没被吹跑的海报。' },
       { id: 'remember', label: '我记得，你也要站进来。', response: '记得这么牢啊。那我就把相机放稳，安心跑过来。' },
       { id: 'favorite', label: '我最喜欢准备活动的这一段。', response: '我也是。正式开始以后很热闹，准备的时候，能看见每个人在乎什么。' },
     ],
